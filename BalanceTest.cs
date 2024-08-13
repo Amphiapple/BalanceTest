@@ -11,6 +11,8 @@ using Il2CppAssets.Scripts.Unity;
 using Il2CppAssets.Scripts.Unity.Scenes;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Projectiles;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
 
 [assembly: MelonInfo(typeof(BalanceTest.BalanceTest), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
@@ -33,74 +35,35 @@ public class BalanceTest : BloonsTD6Mod
         [HarmonyPostfix]
         public static void Postfix()
         {
-            SuperMonkey();
-        }
-    }
-
-    private static void SuperMonkey()
-    {
-        var models = Game.instance.model;
-
-        models.GetUpgrade("Knockback").cost = 2000;
-        models.GetUpgrade("Dark Knight").cost = 6500;
-
-        foreach (TowerModel tower in Game.instance.model.towers)
-        {
-            if (Regex.IsMatch(tower.name, "SuperMonkey-..[1-2]"))
+            foreach (TowerModel tower in Game.instance.model.towers)
             {
-                foreach (var w in tower.GetWeapons())
+                if (Regex.IsMatch(tower.name, "CaptainChurchill"))
                 {
-                    foreach (var b in w.projectile.behaviors)
+                    foreach (var w in tower.GetWeapons())
                     {
-                        try
+                        if (w.projectile.id == "Projectile")
                         {
-                            b.Cast<KnockbackModel>().lightMultiplier = 1.2f;
-                            b.Cast<KnockbackModel>().moabMultiplier = 0.2f;
-                        }
-                        catch
-                        {
-
+                            w.rate /= 1.5f;
+                            var b = w.projectile.GetBehavior<CreateProjectileOnExhaustPierceModel>();
+                            b.minimumTimeDifferenceInFrames = 2;
+                            b.projectile.GetDamageModel().damage /= 1.5f;
                         }
                     }
-                }
-            }
 
-            if (Regex.IsMatch(tower.name, "SuperMonkey-3.."))
-            {
-                foreach (var w in tower.GetWeapons())
-                {
-                    try
+                    foreach (var a in tower.GetAbilities())
                     {
-                        w.emission.Cast<RandomArcEmissionModel>().count = 4;
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
-
-            if (Regex.IsMatch(tower.name, "SuperMonkey-.[3-5]."))
-            {
-                foreach (var w in tower.GetWeapons())
-                {
-                    w.projectile.pierce += 1;
-                }
-            }
-
-            if (Regex.IsMatch(tower.name, "SuperMonkey-..[3-5]"))
-            {
-                foreach (var w in tower.GetWeapons())
-                {
-                    foreach (var b in w.projectile.behaviors)
-                    {
-                        try
+                        foreach (var b in a.behaviors)
                         {
-                            b.Cast<KnockbackModel>().lightMultiplier = 1.3f;
-                        }
-                        catch
-                        {
+                            try
+                            {
+                                var d = b.Cast<MutateProjectileOnAbilityModel>();
+                                d.damageIncrease *= 2;
+                                d.projectileBehaviorModel.Cast<DamageModifierForTagModel>().damageAddative /= 1.5f;
+                            }
+                            catch
+                            {
 
+                            }
                         }
                     }
                 }
