@@ -1,1 +1,15 @@
-When you push a tag to GitHub, the contents of this file will become your release message
+- Lv1 Cannon damage 3 > 2
+- Lv7 Cannon damage 6 > 4
+- Lv12 Cannon damage 9 > 6
+- Lv14 Cannon damage 12 > 8
+- Lv15 Cannon fortified damage +3 > +2
+- Lv18 Cannon damage 15 > 10
+- Lv1 Cannon rate 1.8s > 1.2s
+- Lv8 Cannon rate 1.5s > 1s
+- Lv16 Cannon rate 0.9s > 0.6s
+- Lv3 Armour Piercing Shells moab and ceramic damage +9 > +6
+- Lv13 Armour Piercing Shells moab and ceramic damage +21 > +14
+- Lv17 Armour Piercing Shells moab and ceramic damage +33 > +22
+- Lv13 Armour Piercing Shells base damage +1 > +2
+- Lv17 Armour Piercing Shells base damage +2 > +4
+ - The changes to the base damage increase in V44 didn't happen

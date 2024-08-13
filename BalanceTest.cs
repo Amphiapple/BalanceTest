@@ -47,6 +47,25 @@ public class BalanceTest : BloonsTD6Mod
                             var b = w.projectile.GetBehavior<CreateProjectileOnExhaustPierceModel>();
                             b.minimumTimeDifferenceInFrames = 2;
                             b.projectile.GetDamageModel().damage /= 1.5f;
+
+                            try
+                            {
+                                var c = b.projectile.GetBehavior<DamageModifierForTagModel>();
+                                if (c.tag == "Fortified")
+                                {
+                                    c.damageAddative /= 1.5f;
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+                            
+                        }
+                        if (w.projectile.id == "MachineGunProjectile")
+                        {
+                            w.rate = 999f;
+
                         }
                     }
 
@@ -57,7 +76,7 @@ public class BalanceTest : BloonsTD6Mod
                             try
                             {
                                 var d = b.Cast<MutateProjectileOnAbilityModel>();
-                                d.damageIncrease *= 2;
+                                //d.damageIncrease *= 2;
                                 d.projectileBehaviorModel.Cast<DamageModifierForTagModel>().damageAddative /= 1.5f;
                             }
                             catch
