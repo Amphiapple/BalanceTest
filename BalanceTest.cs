@@ -62,11 +62,6 @@ public class BalanceTest : BloonsTD6Mod
                             }
                             
                         }
-                        if (w.projectile.id == "MachineGunProjectile")
-                        {
-                            w.rate = 999f;
-
-                        }
                     }
 
                     foreach (var a in tower.GetAbilities())

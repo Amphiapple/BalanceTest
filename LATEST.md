@@ -1,3 +1,4 @@
+- Lv1 Cannon explosion delay 3 > 2
 - Lv1 Cannon damage 3 > 2
 - Lv7 Cannon damage 6 > 4
 - Lv12 Cannon damage 9 > 6
