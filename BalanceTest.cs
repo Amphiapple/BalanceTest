@@ -13,6 +13,7 @@ using Il2Cpp;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors;
 
 [assembly: MelonInfo(typeof(BalanceTest.BalanceTest), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
@@ -35,48 +36,72 @@ public class BalanceTest : BloonsTD6Mod
         [HarmonyPostfix]
         public static void Postfix()
         {
-            foreach (TowerModel tower in Game.instance.model.towers)
+            foreach (TowerModel t in Game.instance.model.towers)
             {
-                if (Regex.IsMatch(tower.name, "CaptainChurchill"))
+                if (Regex.IsMatch(t.name, "Adora"))
                 {
-                    foreach (var w in tower.GetWeapons())
+                    foreach (var w in t.GetWeapons())
                     {
-                        if (w.projectile.id == "Projectile")
+                        if (w.projectile.id == "BaseProjectile")
                         {
-                            w.rate /= 1.5f;
-                            var b = w.projectile.GetBehavior<CreateProjectileOnExhaustPierceModel>();
-                            b.minimumTimeDifferenceInFrames = 2;
-                            b.projectile.GetDamageModel().damage /= 1.5f;
-
+                            //Remove main attack fortified damage
                             try
                             {
-                                var c = b.projectile.GetBehavior<DamageModifierForTagModel>();
-                                if (c.tag == "Fortified")
+                                var b = w.projectile.GetBehavior<DamageModifierForTagModel>();
+                                if (b.tag == "Fortified")
                                 {
-                                    c.damageAddative /= 1.5f;
+                                    b.damageAddative = 0;
                                 }
                             }
                             catch
                             {
 
                             }
-                            
+
+                            //Increase main attack pierce
+                            if (Regex.IsMatch(t.name, "Adora 1[3-9]") || Regex.IsMatch(t.name, "Adora 20"))
+                            {
+                                w.projectile.pierce += 2;
+                            }
+
+                            //Increase main attack rate
+                            if (Regex.IsMatch(t.name, "Adora 1[1-6]"))
+                            {
+                                w.rate = 0.8f;
+                            }
+                            else if (Regex.IsMatch(t.name, "Adora 1[7-9]") || Regex.IsMatch(t.name, "Adora 20"))
+                            {
+                                w.rate = 0.6f;
+                            }
                         }
                     }
 
-                    foreach (var a in tower.GetAbilities())
+                    foreach (var a in t.GetAbilities())
                     {
-                        foreach (var b in a.behaviors)
+                        if (a.displayName == "Blood Sacrifice")
                         {
-                            try
-                            {
-                                var d = b.Cast<MutateProjectileOnAbilityModel>();
-                                //d.damageIncrease *= 2;
-                                d.projectileBehaviorModel.Cast<DamageModifierForTagModel>().damageAddative /= 1.5f;
-                            }
-                            catch
-                            {
+                            //Decrease blood sacrifice cooldown
+                            a.cooldown = 10;
 
+                            if (Regex.IsMatch(t.name, "Adora 20"))
+                            {
+                               a.GetBehavior<BloodSacrificeModel>().bonusSacrificeAmount = 50;
+                            }
+                        }
+
+                        if (a.displayName == "Ball of Light")
+                        {
+                            //Remove ball of light fortified damage
+                            var b = a.GetBehavior<AbilityCreateTowerModel>().towerModel.GetWeapon().projectile.GetBehavior<DamageModifierForTagModel>();
+                            if (b.tag == "Fortified")
+                            {
+                                b.damageAddative = 0;
+                            }
+
+                            //Increase lv20 ball of light lifespan
+                            if (Regex.IsMatch(t.name, "Adora 20"))
+                            {
+                                a.GetBehavior<AbilityCreateTowerModel>().towerModel.GetBehavior<TowerExpireModel>().lifespan = 20;
                             }
                         }
                     }
