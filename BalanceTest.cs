@@ -1,19 +1,34 @@
 using MelonLoader;
+
 using BTD_Mod_Helper;
+
 using BTD_Mod_Helper.Extensions;
+
 using BalanceTest;
-using Harmony;
+
+using HarmonyLib;
+
 using System;
+
 using System.Text.RegularExpressions;
-using Il2CppAssets.Scripts.Models.Towers;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
-using Il2CppAssets.Scripts.Unity;
-using Il2CppAssets.Scripts.Unity.Scenes;
+
 using Il2Cpp;
-using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers.Projectiles;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
+
+using Il2CppAssets.Scripts.Models.Towers;
+
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
+
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
+
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
+
+using Il2CppAssets.Scripts.Models.Towers.Projectiles;
+
+using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
+
+using Il2CppAssets.Scripts.Unity;
+
+using Il2CppAssets.Scripts.Unity.Scenes;
 
 [assembly: MelonInfo(typeof(BalanceTest.BalanceTest), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
@@ -83,6 +98,7 @@ public class BalanceTest : BloonsTD6Mod
                             //Decrease blood sacrifice cooldown
                             a.cooldown = 10;
 
+                            //Decrease sacrifice amount for buff
                             if (Regex.IsMatch(t.name, "Adora 20"))
                             {
                                a.GetBehavior<BloodSacrificeModel>().bonusSacrificeAmount = 50;
